@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 exports.postUserLogin = {
   body: Joi.object({
-    username: Joi.string().required(),
+    email: Joi.string().required(),
     password: Joi.string().required(),
   }).required(),
 };

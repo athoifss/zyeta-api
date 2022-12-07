@@ -3,7 +3,7 @@ const { createError } = require("../helpers/response");
 exports.validateSchema = (schema) => {
   return (req, res, next) => {
     try {
-      //Path paramters validation
+      //Path parameters validation
       if (schema.path) {
         if (isEmpty(req.params))
           return next(
@@ -36,7 +36,6 @@ exports.validateSchema = (schema) => {
           );
 
         const validation = schema.body.validate(req.body, { convert: false });
-        console.log({ validation });
         if (validation.error)
           return next(
             createError("Req body verfication failed", 400, validation.error)

@@ -1,36 +1,32 @@
-const Pool = require("pg").Pool;
-const config = require("../config/config");
+const client = require("mongodb").MongoClient;
+const config = require("../config/config.js");
+const url = "mongodb://localhost:27017";
 
-const pool = new Pool({
-  user: config.dbUser,
-  host: config.dbHost,
-  database: config.db,
-  password: config.dbPassword,
-  port: "5432",
-});
+let _db;
+
+function initDb(callback) {
+  if (_db) {
+    console.warn("Trying to init DB again!");
+    return callback(null, _db);
+  }
+
+  client.connect(url, { useUnifiedTopology: true }, connected);
+
+  function connected(err, db) {
+    if (err) return callback(err);
+
+    console.log("Mongo Db connected");
+    _db = db.db(config.db);
+
+    return callback(null, _db);
+  }
+}
+
+function getDb() {
+  return _db;
+}
 
 module.exports = {
-  query: (...args) => {
-    return new Promise((resolve, reject) => {
-      return pool
-        .connect()
-        .then((client) => {
-          return client
-            .query(...args)
-            .then((res) => {
-              client.release();
-              resolve(res.rows);
-            })
-            .catch((err) => {
-              client.release();
-              reject(err);
-            });
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  },
-
-  pool: pool,
+  getDb,
+  initDb,
 };

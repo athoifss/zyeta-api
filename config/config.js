@@ -1,7 +1,7 @@
 module.exports = {
-  port: 5000,
+  port: 9000,
   dbHost: "localhost",
-  db: "zyeta",
+  db: "Zyeta",
   dbUser: "root",
   dbPassword: "password",
   secretToken: "superSecretTokenWhichWillBeUpdatedLaterWithRandomString",
