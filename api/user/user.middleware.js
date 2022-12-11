@@ -2,7 +2,6 @@ const { createError } = require("../../helpers/response");
 const { ObjectId } = require("mongodb");
 
 const RolesHierarchy = ["L4", "L3", "L2", "L1"];
-
 exports.authoriseUserCreation = () => {
   return (req, res, next) => {
     function sendError(msg) {

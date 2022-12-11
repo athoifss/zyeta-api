@@ -3,21 +3,21 @@
 const router = require("express").Router();
 
 const { validateSchema } = require("../../middlewares/schema-validation");
+const { authorize } = require("../../middlewares/auth");
+const { addFlags } = require("../../middlewares/flags-addition");
 
 const service = require("./kpi.service");
 const schema = require("./kpi.schema");
 
-const { authorize } = require("../../middlewares/auth");
-const { addFlags } = require("../../middlewares/flags-addition");
+const { RoleLevels } = require("../../helpers/auth");
 
 /* For get requests add the flags here itself, but for post and put need access 
    to req.auth object when can only got afer the authorize middleware so called 
-   again for those methods */
-router.use(addFlags());
+   again for those methods */ router.use(addFlags());
 
 router.post(
   "/",
-  authorize(["L4", "L3"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.createKpi),
   addFlags(),
   service.createKpi
@@ -25,7 +25,7 @@ router.post(
 
 router.put(
   "/",
-  authorize(["L4", "L3"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.updateKpi),
   addFlags(),
   service.updateKpi
@@ -33,7 +33,7 @@ router.put(
 
 router.patch(
   "/status",
-  authorize(["L4", "L3"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.updateKpiStatus),
   addFlags(),
   service.updateKpiStatus
@@ -41,7 +41,7 @@ router.patch(
 
 router.post(
   "/publish",
-  authorize(["L4", "L3"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.publishKpi),
   addFlags(),
   service.publishKpi
@@ -49,7 +49,7 @@ router.post(
 
 router.post(
   "/questions",
-  authorize(["L4"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.createKpiQuestion),
   addFlags(),
   service.addQuestion
@@ -57,7 +57,7 @@ router.post(
 
 router.put(
   "/questions",
-  authorize(["L4"]),
+  authorize(RoleLevels.L3),
   validateSchema(schema.editKpiQuestion),
   service.editKpiQuestion
 );

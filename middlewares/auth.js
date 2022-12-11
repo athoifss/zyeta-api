@@ -5,6 +5,8 @@ const { ObjectId } = require("mongodb");
 const { secretToken } = require("../config/config");
 const { createError } = require("../helpers/response");
 
+const { RoleLevels } = require("../helpers/auth");
+
 exports.authorize = function (roleLevels = RoleLevels.All) {
   if (!Array.isArray(roleLevels)) roleLevels = [roleLevels];
 
@@ -14,12 +16,10 @@ exports.authorize = function (roleLevels = RoleLevels.All) {
     }
 
     try {
-      const token =
-        req.headers["Authorization"] || req.headers["authorization"];
+      const token = req.headers["Authorization"] || req.headers["authorization"];
 
       if (!token) return sendError("No Token"); // Token does not exist
-      if (token.indexOf("Bearer") !== 0)
-        return sendError("Token format invalid"); // Wrong format
+      if (token.indexOf("Bearer") !== 0) return sendError("Token format invalid"); // Wrong format
 
       const tokenString = token.split(" ")[1];
       jwt.verify(tokenString, secretToken, (err, decodedToken) => {
@@ -28,9 +28,7 @@ exports.authorize = function (roleLevels = RoleLevels.All) {
         if (!decodedToken.roleLevel) return sendError("Role missing");
 
         const userRole = decodedToken.roleLevel;
-
-        if (roleLevels.indexOf(userRole) === -1)
-          return sendError("User not authorized");
+        if (roleLevels.indexOf(userRole) === -1) return sendError("User not authorized");
 
         req.auth = { ...decodedToken, _id: ObjectId(decodedToken._id) };
         next();
@@ -39,8 +37,4 @@ exports.authorize = function (roleLevels = RoleLevels.All) {
       next(err);
     }
   };
-};
-
-const RoleLevels = {
-  All: ["L4", "L3", "L2", "L1"],
 };

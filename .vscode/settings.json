@@ -1,0 +1,37 @@
+{
+  "liveServer.settings.port": 5501,
+  "liveSassCompile.settings.autoprefix": null,
+  "liveSassCompile.settings.excludeList": [
+    "**/node_modules/**",
+    ".vscode/**"
+  ],
+  "liveSassCompile.settings.generateMap": false,
+  "liveSassCompile.settings.formats": [
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": "~/styles/"
+    }
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#e78d74",
+    "activityBar.activeBorder": "#c9f6d2",
+    "activityBar.background": "#e78d74",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#c9f6d2",
+    "activityBarBadge.foreground": "#15202b",
+    "sash.hoverBorder": "#e78d74",
+    "statusBar.background": "#e06948",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#d14923",
+    "statusBarItem.remoteBackground": "#e06948",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#e06948",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#e0694899",
+    "titleBar.inactiveForeground": "#15202b99",
+    "commandCenter.border": "#15202b99"
+  },
+  "peacock.color": "#e06948"
+}
