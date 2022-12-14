@@ -21,21 +21,33 @@ exports.createKpiQuestion = {
     kpiId: Joi.objectId().required(),
     order: Joi.number().required(),
     type: Joi.string().required(),
-    points: Joi.number(),
     hasFileUpload: Joi.boolean(),
-    title: Joi.string().required(),
-    choices: Joi.array().min(2),
-    answer: Joi.alternatives(Joi.string(), Joi.number()),
+    content: Joi.string().required(),
+    choices: Joi.array()
+      .min(2)
+      .items(
+        Joi.object({
+          content: Joi.string().required(),
+          points: Joi.number(),
+        })
+      ),
+    inputRange: Joi.array().min(2).max(2).items(Joi.number()),
     hasSubQuestions: Joi.boolean(),
     subQuestions: Joi.array()
       .items(
         Joi.object({
           order: Joi.number().required(),
           type: Joi.string().required(),
-          points: Joi.number().required(),
-          title: Joi.string().required(),
-          choices: Joi.array().min(2),
-          answer: Joi.alternatives(Joi.string(), Joi.number()),
+          content: Joi.string().required(),
+          choices: Joi.array()
+            .min(2)
+            .items(
+              Joi.object({
+                content: Joi.string().required(),
+                points: Joi.number(),
+              })
+            ),
+          inputRange: Joi.array().min(2).max(2).items(Joi.number()),
           hasFileUpload: Joi.boolean().required(),
         })
       )

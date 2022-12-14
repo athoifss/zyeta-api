@@ -1,3 +1,5 @@
+const uuid = require("short-uuid");
+
 exports.getPaginationPipeline = (skipCount, pageSize) => {
   return [
     {
@@ -39,4 +41,16 @@ exports.genMetaData = (result, { pageSize, pageNo }) => {
     pageSize,
     pageNo,
   };
+};
+
+exports.convertArrToObj = (arr, key) => {
+  const obj = {};
+  arr.forEach((item) => {
+    obj[item[key]] = item;
+  });
+  return obj;
+};
+
+exports.genUuid = (len) => {
+  return uuid.generate().substring(0, len);
 };

@@ -1,9 +1,5 @@
 const { getDb } = require("../../helpers/database");
-const {
-  getPaginationParams,
-  getPaginationPipeline,
-} = require("../../helpers/utils");
-const { get } = require("./user.controller");
+const { getPaginationParams, getPaginationPipeline } = require("../../helpers/utils");
 
 exports.addNewUser = (body) => {
   return getDb().collection("users").insertOne(body);
@@ -28,9 +24,27 @@ exports.updateUser = (findQuery, body) => {
 
 exports.getUsers = (body, query) => {
   const { skipCount, limit } = getPaginationParams(query);
+  const aggregation = [{ $match: body }, ...getPaginationPipeline(skipCount, limit)];
+  return getDb().collection("users").aggregate(aggregation).toArray();
+};
+
+exports.getUserKpis = (body, query) => {
+  const { skipCount, limit } = getPaginationParams(query);
+
   const aggregation = [
     { $match: body },
+    {
+      $lookup: {
+        from: "kpis",
+        let: { kpiId: "$kpiId" },
+        as: "kpi",
+        pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$kpiId"] } } }],
+      },
+    },
+    {
+      $unwind: { path: "$kpi", preserveNullAndEmptyArrays: false },
+    },
     ...getPaginationPipeline(skipCount, limit),
   ];
-  return getDb().collection("users").aggregate(aggregation).toArray();
+  return getDb().collection("kpis-published").aggregate(aggregation).toArray();
 };

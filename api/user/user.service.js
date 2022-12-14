@@ -8,8 +8,6 @@ const {
 
 const queries = require("./user.queries");
 
-const { issueToken } = require("../../helpers/auth");
-
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
 const { genMetaData } = require("../../helpers/utils");
@@ -33,7 +31,6 @@ exports.createNewUser = (req, res, next) => {
 };
 
 exports.getUserProfile = (req, res, next) => {
-  console.log(req.query);
   queries
     .getUserProfile({ ...req.body, _id: req.auth._id })
     .then((result) => {
@@ -74,8 +71,22 @@ exports.editUser = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
+  const findQuery = { ...req.body, createdBy: ObjectId(req.auth._id) };
   queries
-    .getUsers(req.body, req.query)
+    .getUsers(findQuery, req.query)
+    .then((result) => {
+      const metaData = genMetaData(result, req.query);
+      sendSuccessWithMeta(res, result[0].data, metaData);
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getUserKpis = (req, res, next) => {
+  const findQuery = { ...req.body, userId: ObjectId(req.auth._id) };
+  queries
+    .getUserKpis(findQuery, req.query)
     .then((result) => {
       const metaData = genMetaData(result, req.query);
       sendSuccessWithMeta(res, result[0].data, metaData);

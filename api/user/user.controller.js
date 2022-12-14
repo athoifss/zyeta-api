@@ -24,6 +24,8 @@ router.post(
   service.createNewUser
 );
 
+router.get("/", authorize(RoleLevels.L3), service.getUsers);
+
 router.put(
   "/",
   authorize(RoleLevels.L3),
@@ -34,6 +36,6 @@ router.put(
 
 router.get("/profile", authorize(), service.getUserProfile);
 
-router.get("/", authorize("L4"), service.getUsers);
+router.get("/kpis", authorize(), service.getUserKpis);
 
 module.exports = router;

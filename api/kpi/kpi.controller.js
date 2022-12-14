@@ -31,6 +31,8 @@ router.put(
   service.updateKpi
 );
 
+router.get("/:kpiId", authorize(), service.getSpecificKpi);
+
 router.patch(
   "/status",
   authorize(RoleLevels.L3),
@@ -61,5 +63,7 @@ router.put(
   validateSchema(schema.editKpiQuestion),
   service.editKpiQuestion
 );
+
+router.post("/submit", authorize(RoleLevels.L1), addFlags(), service.submitKpi);
 
 module.exports = router;
